@@ -15,23 +15,37 @@ jobs:
           DOKPLOY_APP_ID: ${{ secrets.DOKPLOY_APP_ID }}
         run: |
           echo "🚀 Starting deployment to Dokploy..."
-          echo "Application ID: $DOKPLOY_APP_ID"
           
-          response=$(curl -X POST "$DOKPLOY_URL/api/application/$DOKPLOY_APP_ID/deploy" \
+          # Normalize URL (remove trailing slash)
+          DOKPLOY_URL=$(echo "$DOKPLOY_URL" | sed 's:/*$::')
+          
+          echo "Dokploy URL: $DOKPLOY_URL"
+          echo "Application ID: $DOKPLOY_APP_ID"
+          echo "Endpoint: $DOKPLOY_URL/api/application/$DOKPLOY_APP_ID/deploy"
+          
+          # Make the request and capture both body and status code
+          http_code=$(curl -L -X POST "$DOKPLOY_URL/api/application/$DOKPLOY_APP_ID/deploy" \
             -H "Authorization: Bearer $DOKPLOY_API_KEY" \
             -H "Content-Type: application/json" \
-            -w "\n%{http_code}" \
+            -w "%{http_code}" \
+            -o /tmp/response_body.txt \
             -s)
           
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | sed '$d')
+          body=$(cat /tmp/response_body.txt 2>/dev/null || echo "")
           
-          echo "Response: $body"
-          echo "HTTP Status: $http_code"
+          echo ""
+          echo "=== Response Body ==="
+          echo "$body"
+          echo ""
+          echo "=== HTTP Status Code ==="
+          echo "$http_code"
           
           if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
             echo "✅ Deployment triggered successfully!"
           else
             echo "❌ Deployment failed with status code: $http_code"
+            if [ -n "$body" ]; then
+              echo "Error details: $body"
+            fi
             exit 1
           fi

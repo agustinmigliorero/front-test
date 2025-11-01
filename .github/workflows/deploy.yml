@@ -1,4 +1,4 @@
-name: Deploy to Local Dokploy
+name: Deploy to Dokploy
 
 on:
   push:
@@ -8,11 +8,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Deploy using Dokploy self-hosted
+      - name: Deploy to Dokploy
         uses: dokploy/github-action@v1
         with:
           token: ${{ secrets.DOKPLOY_API_KEY }}
-          dokploy-url: http://127.0.0.1:3000
+          dokploy-url: ${{ secrets.DOKPLOY_URL }}
+          application-name: front-test

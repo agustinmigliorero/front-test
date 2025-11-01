@@ -1,14 +1,38 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import { getPublications } from "@/api/api";
 
-async function Publicaciones() {
-  let publications = [];
-  let error = null;
+function Publicaciones() {
+  const [publications, setPublications] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   
-  try {
-    publications = await getPublications();
-  } catch (err) {
-    error = err.message || "Error al cargar las publicaciones";
-    console.error("Error fetching publications:", err);
+  useEffect(() => {
+    async function fetchPublications() {
+      try {
+        setLoading(true);
+        const data = await getPublications();
+        setPublications(data || []);
+        setError(null);
+      } catch (err) {
+        setError(err.message || "Error al cargar las publicaciones");
+        console.error("Error fetching publications:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchPublications();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white p-4 rounded-lg shadow-md w-full text-black">
+        <h1 className="text-2xl font-bold mb-4">Publicaciones</h1>
+        <p className="text-gray-500">Cargando publicaciones...</p>
+      </div>
+    );
   }
 
   if (error) {

@@ -1,9 +1,6 @@
 import Publicaciones from "@/components/Publicaciones";
 import Link from "next/link";
 
-// Force dynamic rendering to avoid build-time fetch errors
-export const dynamic = 'force-dynamic';
-
 export default function Home() {
   return (
     <>

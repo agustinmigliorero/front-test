@@ -1,7 +1,19 @@
 async function getPublications() {
-  const response = await fetch("http://localhost:3002/");
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch("http://localhost:3002/", {
+      cache: 'no-store', // Ensure fresh data on each request
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    throw error;
+  }
 }
 
 async function createPublication(publication) {

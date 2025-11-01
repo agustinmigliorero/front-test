@@ -21,12 +21,15 @@ jobs:
           
           echo "Dokploy URL: $DOKPLOY_URL"
           echo "Application ID: $DOKPLOY_APP_ID"
-          echo "Endpoint: $DOKPLOY_URL/api/application/$DOKPLOY_APP_ID/deploy"
+          echo "Endpoint: $DOKPLOY_URL/api/application.deploy"
           
           # Make the request and capture both body and status code
-          http_code=$(curl -L -X POST "$DOKPLOY_URL/api/application/$DOKPLOY_APP_ID/deploy" \
-            -H "Authorization: Bearer $DOKPLOY_API_KEY" \
+          # Dokploy uses x-api-key header and application.deploy endpoint
+          http_code=$(curl -L -X POST "$DOKPLOY_URL/api/application.deploy" \
+            -H "x-api-key: $DOKPLOY_API_KEY" \
             -H "Content-Type: application/json" \
+            -H "accept: application/json" \
+            -d "{\"applicationId\": \"$DOKPLOY_APP_ID\"}" \
             -w "%{http_code}" \
             -o /tmp/response_body.txt \
             -s)

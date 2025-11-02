@@ -30,7 +30,9 @@
 // }
 
 // Export stubs to avoid import errors
+// These functions never make actual HTTP requests
 export function getPublications() {
+  // Return immediately without any async fetch
   return Promise.resolve([]);
 }
 

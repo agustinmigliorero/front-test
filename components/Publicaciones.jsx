@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { getPublications } from "@/api/api";
+// import { getPublications } from "@/api/api";
 
 function Publicaciones() {
   const [publications, setPublications] = useState([]);
@@ -9,23 +9,9 @@ function Publicaciones() {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // API calls disabled during build
+    // API calls completely disabled - no imports, no calls
     setLoading(false);
     setPublications([]);
-    // async function fetchPublications() {
-    //   try {
-    //     setLoading(true);
-    //     const data = await getPublications();
-    //     setPublications(data || []);
-    //     setError(null);
-    //   } catch (err) {
-    //     setError(err.message || "Error al cargar las publicaciones");
-    //     console.error("Error fetching publications:", err);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
-    // fetchPublications();
   }, []);
 
   if (loading) {

@@ -13,9 +13,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
-# Set build ID to invalidate cache when needed
-ARG BUILD_DATE=unknown
-ENV BUILD_DATE=$BUILD_DATE
+# Print git info to verify latest code (this will force cache invalidation)
+RUN git rev-parse HEAD > /tmp/current-commit.txt || echo "no-git" > /tmp/current-commit.txt && \
+    cat /tmp/current-commit.txt
 # Build Next.js app
 RUN pnpm run build
 

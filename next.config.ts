@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  // Disable static optimization for all pages
+  // Ensure all routes are dynamic
   experimental: {
     forceSwcTransforms: true,
   },

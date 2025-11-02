@@ -9,21 +9,23 @@ function Publicaciones() {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    async function fetchPublications() {
-      try {
-        setLoading(true);
-        const data = await getPublications();
-        setPublications(data || []);
-        setError(null);
-      } catch (err) {
-        setError(err.message || "Error al cargar las publicaciones");
-        console.error("Error fetching publications:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchPublications();
+    // API calls disabled during build
+    setLoading(false);
+    setPublications([]);
+    // async function fetchPublications() {
+    //   try {
+    //     setLoading(true);
+    //     const data = await getPublications();
+    //     setPublications(data || []);
+    //     setError(null);
+    //   } catch (err) {
+    //     setError(err.message || "Error al cargar las publicaciones");
+    //     console.error("Error fetching publications:", err);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
+    // fetchPublications();
   }, []);
 
   if (loading) {
